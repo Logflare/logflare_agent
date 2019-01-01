@@ -14,7 +14,9 @@ defmodule LFAgent.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {LFAgent.Application, []},
       extra_applications: [:logger]
+      # registered: [LFAgent]
     ]
   end
 
