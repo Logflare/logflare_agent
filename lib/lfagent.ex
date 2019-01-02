@@ -10,7 +10,7 @@ defmodule LFAgent.Main do
   def init(_state) do
     state = set_cursor(0)
     schedule_work()
-    IO.inspect(state)
+    IO.puts("Watching #{@file_to_watch} from line #{state.cursor}...")
     {:ok, state}
   end
 
@@ -28,14 +28,19 @@ defmodule LFAgent.Main do
     end
   end
 
+  defp logflare_it(stream) do
+    Enum.each(stream, fn {message, _} -> IO.inspect(message) end)
+  end
+
   defp stream_stuff(state) do
     stream = File.stream!(@file_to_watch)
       |> Stream.with_index()
       |> Stream.filter(fn {_, cursor} -> cursor > state.cursor end)
       |> Enum.to_list()
+
+    logflare_it(stream)
     {_, new_cursor} = List.last(stream)
     state = set_cursor(new_cursor)
-    IO.inspect(stream)
     {:noreply, state}
   end
 
