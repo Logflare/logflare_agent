@@ -42,7 +42,16 @@ defmodule LFAgent.Main do
   defp set_cursor(cursor) do
     {:ok, file_stat} = File.stat(@file_to_watch)
     state = Map.from_struct(file_stat)
-    Map.put(state, :cursor, cursor)
+    case cursor == 0 do
+      true ->
+        stream = File.stream!(@file_to_watch)
+          |> Stream.with_index()
+          |> Enum.to_list()
+        {_, cursor} = List.last(stream)
+        Map.put(state, :cursor, cursor)
+      false ->
+        Map.put(state, :cursor, cursor)
+    end
   end
 
   defp schedule_work() do
