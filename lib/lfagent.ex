@@ -1,5 +1,5 @@
 defmodule LFAgent.Main do
-  @file_to_watch "/private/var/log/system.log"
+  @file_to_watch Application.get_env(:lfagent, :file_to_watch)
   use GenServer
 
   def start_link do

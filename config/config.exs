@@ -10,7 +10,7 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :lfagent, key: :value
+config :lfagent, file_to_watch: "/private/var/log/system.log"
 #
 # and access this configuration in your application as:
 #
