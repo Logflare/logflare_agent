@@ -39,10 +39,11 @@ defmodule LFAgent.Main do
   end
 
   defp log_line(line) do
+    api_key = System.get_env("LOGFLARE_KEY")
     url = "https://logflare.app/api/logs"
     headers = [
       {"Content-type", "application/json"},
-      {"X-API-KEY", "SL7NBVZbxN1C"}
+      {"X-API-KEY", api_key}
     ]
     body = Jason.encode!(%{
       log_entry: line,
