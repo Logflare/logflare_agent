@@ -2,7 +2,7 @@ defmodule LFAgent.Main do
   use GenServer
 
   def start_link(state) do
-    GenServer.start_link(__MODULE__, state)
+    GenServer.start_link(__MODULE__, state, name: state.id)
   end
 
   def init(state) do
