@@ -9,7 +9,7 @@ defmodule LFAgent.Application do
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Agent
-      supervisor(LFAgent.Main, []),
+      supervisor(LFAgent.Main, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
