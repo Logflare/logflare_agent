@@ -40,6 +40,7 @@ defmodule LFAgent.Main do
 
   defp log_line(line) do
     api_key = System.get_env("LOGFLARE_KEY")
+    source = Application.get_env(:lfagent, :source)
     url = "https://logflare.app/api/logs"
     headers = [
       {"Content-type", "application/json"},
@@ -47,7 +48,7 @@ defmodule LFAgent.Main do
     ]
     body = Jason.encode!(%{
       log_entry: line,
-      source: "69dc2c0d-a4c8-4bca-9c32-026968479ca8",
+      source: source,
       })
     request = HTTPoison.post!(url, body, headers)
     unless request.status_code == 200 do
