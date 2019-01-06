@@ -1,28 +1,27 @@
 defmodule LFAgent.Main do
-  @file_to_watch Application.get_env(:lfagent, :file_to_watch)
   use GenServer
 
-  def start_link do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  def start_link(state) do
+    GenServer.start_link(__MODULE__, state)
   end
 
   def init(state) do
-    line_count = File.stream!(@file_to_watch)
+    line_count = File.stream!(state.filename)
       |> Enum.count()
     state = Map.put(state, :line_count, line_count)
-    IO.puts("Watching #{@file_to_watch} from line #{state.line_count}...")
+    IO.puts("Watching #{state.filename} from line #{state.line_count}...")
     schedule_work()
     {:ok, state}
   end
 
   def handle_info(:work, state) do
-    {wc, _} = System.cmd("wc", ["-l", "#{@file_to_watch}"])
+    {wc, _} = System.cmd("wc", ["-l", "#{state.filename}"])
     [line_count, _] = String.split(wc)
     line_count = String.to_integer(line_count)
     case line_count > state.line_count do
       true ->
         sed_opt = "#{state.line_count},#{line_count}p"
-        {sed, _} = System.cmd("sed", ["-n", "#{sed_opt}", "#{@file_to_watch}"])
+        {sed, _} = System.cmd("sed", ["-n", "#{sed_opt}", "#{state.filename}"])
         String.split(sed, "\n", trim: true)
           |> Enum.each(fn(line) -> log_line(line) end)
         state = Map.put(state, :line_count, line_count)
