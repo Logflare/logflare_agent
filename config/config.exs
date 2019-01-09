@@ -12,7 +12,7 @@ use Mix.Config
 #
 config :lfagent,
   file_to_watch: "/private/var/log/system.log",
-  source: "69dc2c0d-a4c8-4bca-9c32-026968479ca8"
+  source: "a6c5bca7-a8a7-4bda-a984-a873daaad8d0"
 #
 # and access this configuration in your application as:
 #
