@@ -6,10 +6,12 @@ This Elixir app watches a file and sends new lines to Logflare via the API.
 
 ## Usage
 
-Install erlang
-Install elixir
-`git clone THIS_REPO`
-`mix deps.get`
+To install:
+
+  * Install erlang
+  * Install elixir
+  * `git clone THIS_REPO`
+  * `mix deps.get`
 
 Change the file to watch and the source key in `./config/config.exs`
 
@@ -20,6 +22,7 @@ config :lfagent,
 ```
 
 `mix release`
+
 `LOGFLARE_KEY=YOUR_API_KEY _build/dev/rel/lfagent/bin/lfagent start`
 
 Optionally to start the agent at bootup:
@@ -27,6 +30,7 @@ Optionally to start the agent at bootup:
 `crontab -e`
 
 Add this line to your crontab and save:
+
 `@reboot LOGFLARE_KEY=YOUR_API_KEY /FULL_PATH_TO_INSTALL/_build/dev/rel/lfagent/bin/lfagent start`
 
 ## Installation
