@@ -8,8 +8,8 @@ This Elixir app watches a file and sends new lines to Logflare via the API.
 
 To install:
 
-  * Install erlang
-  * Install elixir
+  * Install Erlang
+  * Install Elixir
   * `git clone https://github.com/Logflare/logflare-agent.git`
   * `mix deps.get`
 
