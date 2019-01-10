@@ -10,7 +10,7 @@ To install:
 
   * Install erlang
   * Install elixir
-  * `git clone THIS_REPO`
+  * `git clone https://github.com/Logflare/logflare-agent.git`
   * `mix deps.get`
 
 Change the file to watch and the source key in `./config/config.exs`
