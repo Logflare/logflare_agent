@@ -2,6 +2,8 @@
 
 .DS_Store
 
+*.dump
+
 # The directory Mix will write compiled artifacts to.
 /_build/
 
