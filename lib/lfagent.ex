@@ -43,7 +43,7 @@ defmodule LFAgent.Main do
         state = Map.put(state, :line_count, line_count)
         schedule_work()
         {:noreply, state}
-      _false ->
+      false ->
         schedule_work()
         {:noreply, state}
     end
@@ -67,9 +67,12 @@ defmodule LFAgent.Main do
     api_key = System.get_env("LOGFLARE_KEY")
     source = Application.get_env(:lfagent, :source)
     url = "https://logflare.app/api/logs"
+    user_agent = List.to_string(Application.spec(:lfagent, :vsn))
+
     headers = [
       {"Content-type", "application/json"},
-      {"X-API-KEY", api_key}
+      {"X-API-KEY", api_key},
+      {"User-Agent", "Logflare Agent/#{user_agent}"}
     ]
     body = Jason.encode!(%{
       log_entry: line,
