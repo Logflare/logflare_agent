@@ -1,4 +1,8 @@
 defmodule LFAgent.Main do
+  @moduledoc """
+  Watches a file and sends new lines to the Logflare API each second.
+  """
+
   use GenServer
 
   def start_link(state) do
@@ -13,6 +17,18 @@ defmodule LFAgent.Main do
     schedule_work()
     {:ok, state}
   end
+
+  @doc """
+  Counts lines in the file, compares to previous line count state.
+  If new state is greater than old state, get the new lines and send
+  them to Logflare.
+
+  We're concerned with the `state.filename` and `state.line_count`.
+
+  If new lines are found we update the `state.line_count` to reflect
+  the current state of the log file.
+
+  """
 
   def handle_info(:work, state) do
     {wc, _} = System.cmd("wc", ["-l", "#{state.filename}"])
@@ -38,6 +54,15 @@ defmodule LFAgent.Main do
 
   end
 
+  @doc """
+  Sends log line to Logflare API.
+
+  ## Parameters
+
+    - line: A single log entry.
+
+  """
+
   defp log_line(line) do
     api_key = System.get_env("LOGFLARE_KEY")
     source = Application.get_env(:lfagent, :source)
@@ -55,6 +80,11 @@ defmodule LFAgent.Main do
       IO.puts("[LOGFLARE] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code.")
     end
   end
+
+  @doc """
+  Schedules work.
+
+  """
 
   defp schedule_work() do
     Process.send_after(self(), :work, 1000)

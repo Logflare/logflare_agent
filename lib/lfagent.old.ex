@@ -1,4 +1,6 @@
 defmodule LFAgent.Old do
+  @moduledoc false
+  
   @file_to_watch "./log_examples/apache_example.txt"
 
   use GenServer
