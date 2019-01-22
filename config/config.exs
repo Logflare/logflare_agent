@@ -11,8 +11,16 @@ use Mix.Config
 # You can configure your application as:
 #
 config :lfagent,
-  file_to_watch: "/private/var/log/system.log",
-  source: "a6c5bca7-a8a7-4bda-a984-a873daaad8d0"
+  sources: [
+    %{
+      path: "/private/var/log/system.log",
+      source: "a6c5bca7-a8a7-4bda-a984-a873daaad8d0"
+    },
+    %{
+      path: "/Users/chasegranberry/.cloudflared/cloudflared.log",
+      source: "dc2804de-ef20-459d-93fd-8b6f938d2bb0"
+    }
+  ]
 #
 # and access this configuration in your application as:
 #

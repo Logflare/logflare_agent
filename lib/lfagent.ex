@@ -13,7 +13,7 @@ defmodule LFAgent.Main do
     line_count = File.stream!(state.filename)
       |> Enum.count()
     state = Map.put(state, :line_count, line_count)
-    IO.puts("Watching #{state.filename} from line #{state.line_count}...")
+    IO.puts("Watching #{state.filename} from line #{state.line_count} for source #{state.source}...")
     schedule_work()
     {:ok, state}
   end
@@ -39,7 +39,7 @@ defmodule LFAgent.Main do
         sed_opt = "#{state.line_count},#{line_count}p"
         {sed, _} = System.cmd("sed", ["-n", "#{sed_opt}", "#{state.filename}"])
         String.split(sed, "\n", trim: true)
-          |> Enum.each(fn(line) -> log_line(line) end)
+          |> Enum.each(fn(line) -> log_line(line, state) end)
         state = Map.put(state, :line_count, line_count)
         schedule_work()
         {:noreply, state}
@@ -54,18 +54,9 @@ defmodule LFAgent.Main do
 
   end
 
-  @doc """
-  Sends log line to Logflare API.
-
-  ## Parameters
-
-    - line: A single log entry.
-
-  """
-
-  defp log_line(line) do
+  defp log_line(line, state) do
     api_key = System.get_env("LOGFLARE_KEY")
-    source = Application.get_env(:lfagent, :source)
+    source = state.source
     url = "https://logflare.app/api/logs"
     user_agent = List.to_string(Application.spec(:lfagent, :vsn))
 
@@ -83,11 +74,6 @@ defmodule LFAgent.Main do
       IO.puts("[LOGFLARE] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code.")
     end
   end
-
-  @doc """
-  Schedules work.
-
-  """
 
   defp schedule_work() do
     Process.send_after(self(), :work, 1000)

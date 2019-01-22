@@ -3,14 +3,19 @@ defmodule LFAgent.Application do
 
   def start(_type, _args) do
     import Supervisor.Spec
-    log_file = Application.get_env(:lfagent, :file_to_watch)
-    agent_id = String.to_atom(log_file)
 
-    children = [
-      supervisor(LFAgent.Main, [%{filename: log_file, id: agent_id}], id: agent_id)
-      # figure out how to dynamically build children list to support
-      # multple files
-    ]
+    log_files = Application.get_env(:lfagent, :sources)
+
+    children =
+      Enum.map(
+          log_files, fn(k) ->
+            source = k.source
+            log_file = k.path
+            agent_id = String.to_atom(log_file)
+
+            supervisor(LFAgent.Main, [%{filename: log_file, source: source, id: agent_id}], id: agent_id)
+          end
+        )
 
     opts = [strategy: :one_for_one, name: LFAgent.Supervisor]
     Supervisor.start_link(children, opts)
