@@ -34,6 +34,7 @@ defmodule LFAgent.Main do
     {wc, _} = System.cmd("wc", ["-l", "#{state.filename}"])
     [line_count, _] = String.split(wc)
     line_count = String.to_integer(line_count)
+
     case line_count > state.line_count do
       true ->
         sed_opt = "#{state.line_count},#{line_count}p"
@@ -44,14 +45,10 @@ defmodule LFAgent.Main do
         schedule_work()
         {:noreply, state}
       false ->
+        state = Map.put(state, :line_count, line_count)
         schedule_work()
         {:noreply, state}
     end
-
-    # {logs, _} = System.cmd("tail", ["-n", "15", "./log_examples/large_access.log"])
-    # sed '10q;d' Dev/lfagent/log_examples/large_access.log
-    # wc -l < Dev/lfagent/log_examples/large_access.log
-
   end
 
   defp log_line(line, state) do
