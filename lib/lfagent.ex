@@ -10,10 +10,15 @@ defmodule LFAgent.Main do
   end
 
   def init(state) do
-    line_count = File.stream!(state.filename)
-      |> Enum.count()
+    file = File.stream!(state.filename)
+    line_count = Enum.count(file)
+
     state = Map.put(state, :line_count, line_count)
-    IO.puts("Watching #{state.filename} from line #{state.line_count} for source #{state.source}...")
+
+    IO.puts(
+      "Watching #{state.filename} from line #{state.line_count} for source #{state.source}..."
+    )
+
     schedule_work()
     {:ok, state}
   end
@@ -39,11 +44,15 @@ defmodule LFAgent.Main do
       true ->
         sed_opt = "#{state.line_count},#{line_count}p"
         {sed, _} = System.cmd("sed", ["-n", "#{sed_opt}", "#{state.filename}"])
-        String.split(sed, "\n", trim: true)
-          |> Enum.each(fn(line) -> log_line(line, state) end)
+
+        sed
+        |> String.split("\n", trim: true)
+        |> Enum.each(fn line -> log_line(line, state) end)
+
         state = Map.put(state, :line_count, line_count)
         schedule_work()
         {:noreply, state}
+
       false ->
         state = Map.put(state, :line_count, line_count)
         schedule_work()
@@ -62,13 +71,19 @@ defmodule LFAgent.Main do
       {"X-API-KEY", api_key},
       {"User-Agent", "Logflare Agent/#{user_agent}"}
     ]
-    body = Jason.encode!(%{
-      log_entry: line,
-      source: source,
+
+    body =
+      Jason.encode!(%{
+        log_entry: line,
+        source: source
       })
+
     request = HTTPoison.post!(url, body, headers)
+
     unless request.status_code == 200 do
-      IO.puts("[LOGFLARE] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code.")
+      IO.puts(
+        "[LOGFLARE] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
+      )
     end
   end
 

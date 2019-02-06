@@ -1,4 +1,8 @@
 defmodule LFAgent.Application do
+  @moduledoc """
+  Spins up a gen server for each log file listed in the config.
+  """
+
   use Application
 
   def start(_type, _args) do
@@ -8,17 +12,19 @@ defmodule LFAgent.Application do
 
     children =
       Enum.map(
-          log_files, fn(k) ->
-            source = k.source
-            log_file = k.path
-            agent_id = String.to_atom(log_file)
+        log_files,
+        fn k ->
+          source = k.source
+          log_file = k.path
+          agent_id = String.to_atom(log_file)
 
-            supervisor(LFAgent.Main, [%{filename: log_file, source: source, id: agent_id}], id: agent_id)
-          end
-        )
+          supervisor(LFAgent.Main, [%{filename: log_file, source: source, id: agent_id}],
+            id: agent_id
+          )
+        end
+      )
 
     opts = [strategy: :one_for_one, name: LFAgent.Supervisor]
     Supervisor.start_link(children, opts)
   end
-
 end
