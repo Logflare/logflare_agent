@@ -2,6 +2,7 @@ defmodule LFAgent.Main do
   @moduledoc """
   Watches a file and sends new lines to the Logflare API each second.
   """
+  require Logger
 
   use GenServer
 
@@ -15,7 +16,7 @@ defmodule LFAgent.Main do
 
     state = Map.put(state, :line_count, line_count)
 
-    IO.puts(
+    Logger.info(
       "Watching #{state.filename} from line #{state.line_count} for source #{state.source}..."
     )
 
@@ -81,7 +82,7 @@ defmodule LFAgent.Main do
     request = HTTPoison.post!(url, body, headers)
 
     unless request.status_code == 200 do
-      IO.puts(
+      Logger.error(
         "[LOGFLARE] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
       )
     end

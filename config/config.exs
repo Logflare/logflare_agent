@@ -10,6 +10,8 @@ use Mix.Config
 
 # You can configure your application as:
 #
+config :logger, :console, format: "$time $metadata[$level] $levelpad$message\n"
+
 config :lfagent,
   sources: [
     %{
@@ -21,6 +23,7 @@ config :lfagent,
       source: "dc2804de-ef20-459d-93fd-8b6f938d2bb0"
     }
   ]
+
 #
 # and access this configuration in your application as:
 #
