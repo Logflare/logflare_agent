@@ -8,8 +8,8 @@ defmodule LogflareAgent.MixProject do
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-
-      # Docs
+      description: description(),
+      package: package(),
       name: "Logflare Agent",
       source_url: "https://github.com/Logflare/logflare_agent",
       homepage_url: "https://logflare.app",
@@ -38,6 +38,17 @@ defmodule LogflareAgent.MixProject do
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
+    ]
+  end
+
+  defp description() do
+    "Logflare Agent watches files and sends new lines to Logflare. Ideal for sending Erlang log messages to the Logflare log management and event analytics platform."
+  end
+
+  defp package() do
+    [
+      links: %{"GitHub" => "https://github.com/Logflare/logflare_agent"},
+      licenses: ["MIT"]
     ]
   end
 end

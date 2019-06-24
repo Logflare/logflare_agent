@@ -13,8 +13,7 @@ defmodule LogflareAgent.Main do
   def init(state) do
     schedule_work()
 
-    file = File.stream!(state.filename)
-    line_count = Enum.count(file)
+    line_count = count_lines()
     state = Map.put(state, :line_count, line_count)
 
     Logger.info(
@@ -46,9 +45,7 @@ defmodule LogflareAgent.Main do
   """
 
   def handle_info(:work, state) do
-    {wc, _} = System.cmd("wc", ["-l", "#{state.filename}"])
-    [line_count, _] = String.split(wc)
-    line_count = String.to_integer(line_count)
+    line_count = count_lines()
 
     case line_count > state.line_count do
       true ->
@@ -94,6 +91,17 @@ defmodule LogflareAgent.Main do
       Logger.error(
         "[Logflare Agent] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
       )
+    end
+  end
+
+  defp count_lines() do
+    {wc, exit_status} = System.cmd("wc", ["-l", "#{state.filename}"])
+
+    if exit_status == 1 do
+      0
+    else
+      [line_count, _] = String.split(wc)
+      String.to_integer(line_count)
     end
   end
 
