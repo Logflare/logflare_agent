@@ -1,8 +1,8 @@
-defmodule LFAgentTest do
+defmodule LogflareAgentTest do
   use ExUnit.Case
-  doctest LFAgent
+  doctest LogflareAgent
 
   test "greets the world" do
-    assert LFAgent.hello() == :world
+    assert LogflareAgent.hello() == :world
   end
 end

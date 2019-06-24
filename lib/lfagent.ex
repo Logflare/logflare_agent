@@ -1,4 +1,4 @@
-defmodule LFAgent.Main do
+defmodule LogflareAgent.Main do
   @moduledoc """
   Watches a file and sends new lines to the Logflare API each second.
   """
@@ -11,16 +11,25 @@ defmodule LFAgent.Main do
   end
 
   def init(state) do
+    schedule_work()
+
     file = File.stream!(state.filename)
     line_count = Enum.count(file)
-
     state = Map.put(state, :line_count, line_count)
 
     Logger.info(
-      "Watching #{state.filename} from line #{state.line_count} for source #{state.source}..."
+      "[Logflare Agent] Watching #{state.filename} from line #{state.line_count} for source #{
+        state.source
+      }..."
     )
 
-    schedule_work()
+    log_line(
+      "[Logflare Agent] Watching #{state.filename} from line #{state.line_count} for source #{
+        state.source
+      }...",
+      state
+    )
+
     {:ok, state}
   end
 
@@ -62,10 +71,10 @@ defmodule LFAgent.Main do
   end
 
   defp log_line(line, state) do
-    api_key = Application.get_env(:lfagent, :api_key)
+    api_key = Application.get_env(:logflare_agent, :api_key)
     source = state.source
-    url = Application.get_env(:lfagent, :url) <> "/logs"
-    user_agent = List.to_string(Application.spec(:lfagent, :vsn))
+    url = Application.get_env(:logflare_agent, :url) <> "/logs"
+    user_agent = List.to_string(Application.spec(:logflare_agent, :vsn))
 
     headers = [
       {"Content-type", "application/json"},

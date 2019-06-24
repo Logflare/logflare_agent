@@ -1,9 +1,9 @@
-defmodule LFAgent.MixProject do
+defmodule LogflareAgent.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :lfagent,
+      app: :logflare_agent,
       version: "0.5.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
@@ -11,7 +11,7 @@ defmodule LFAgent.MixProject do
 
       # Docs
       name: "Logflare Agent",
-      source_url: "https://github.com/Logflare/logflare-agent",
+      source_url: "https://github.com/Logflare/logflare_agent",
       homepage_url: "https://logflare.app",
       docs: [
         main: "readme",
@@ -24,9 +24,8 @@ defmodule LFAgent.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {LFAgent.Application, []},
+      mod: {LogflareAgent.Application, []},
       extra_applications: [:logger]
-      # registered: [LFAgent]
     ]
   end
 

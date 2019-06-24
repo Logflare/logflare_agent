@@ -1,4 +1,4 @@
-defmodule LFAgent.Application do
+defmodule LogflareAgent.Application do
   @moduledoc """
   Spins up a gen server for each log file listed in the config.
   """
@@ -8,7 +8,7 @@ defmodule LFAgent.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    log_files = Application.get_env(:lfagent, :sources)
+    log_files = Application.get_env(:logflare_agent, :sources)
 
     children =
       Enum.map(
@@ -18,13 +18,13 @@ defmodule LFAgent.Application do
           log_file = k.path
           agent_id = String.to_atom(log_file)
 
-          supervisor(LFAgent.Main, [%{filename: log_file, source: source, id: agent_id}],
+          supervisor(LogflareAgent.Main, [%{filename: log_file, source: source, id: agent_id}],
             id: agent_id
           )
         end
       )
 
-    opts = [strategy: :one_for_one, name: LFAgent.Supervisor]
+    opts = [strategy: :one_for_one, name: LogflareAgent.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

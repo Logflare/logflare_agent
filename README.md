@@ -1,4 +1,4 @@
-# LFAgent
+# Logflare Agent
 
 ## About
 
@@ -17,7 +17,7 @@ Configure it.
 
 `mix release`
 
-`_build/dev/rel/lfagent/bin/lfagent start`
+`_build/dev/rel/logflare_agent/bin/logflare_agent start`
 
 Optionally to start the agent at bootup:
 
@@ -25,14 +25,14 @@ Optionally to start the agent at bootup:
 
 Add this line to your crontab and save:
 
-`@reboot /FULL_PATH_TO_INSTALL/_build/dev/rel/lfagent/bin/lfagent start`
+`@reboot /FULL_PATH_TO_INSTALL/_build/dev/rel/logflare_agent/bin/logflare_agent start`
 
 ## Configure
 
 Change the file to watch and the source key in `./config/config.exs`
 
 ```elixir
-config :lfagent,
+config :logflare_agent,
   sources: [
     %{
       path: "/home/logflare/app_release/logflare/var/log/erlang.log.1",
@@ -64,16 +64,16 @@ Your `source`s can be different with each file. This example is useful when watc
 ## Installation with Hex
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `lfagent` to your list of dependencies in `mix.exs`:
+by adding `logflare_agent` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:lfagent, "~> 0.5.0"}
+    {:logflare_agent, "~> 0.5.0"}
   ]
 end
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/lfagent](https://hexdocs.pm/lfagent).
+be found at [https://hexdocs.pm/logflare_agent](https://hexdocs.pm/logflare_agent).
