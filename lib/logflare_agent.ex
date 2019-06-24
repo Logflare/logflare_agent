@@ -13,7 +13,7 @@ defmodule LogflareAgent.Main do
   def init(state) do
     schedule_work()
 
-    line_count = count_lines()
+    line_count = count_lines(state.filename)
     state = Map.put(state, :line_count, line_count)
 
     Logger.info(
@@ -45,7 +45,7 @@ defmodule LogflareAgent.Main do
   """
 
   def handle_info(:work, state) do
-    line_count = count_lines()
+    line_count = count_lines(state.filename)
 
     case line_count > state.line_count do
       true ->
@@ -94,8 +94,8 @@ defmodule LogflareAgent.Main do
     end
   end
 
-  defp count_lines() do
-    {wc, exit_status} = System.cmd("wc", ["-l", "#{state.filename}"])
+  defp count_lines(filename) do
+    {wc, exit_status} = System.cmd("wc", ["-l", "#{filename}"], stderr_to_stdout: true)
 
     if exit_status == 1 do
       0
