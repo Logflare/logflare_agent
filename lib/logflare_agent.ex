@@ -92,7 +92,7 @@ defmodule LogflareAgent.Main do
 
     unless request.status_code == 200 do
       Logger.error(
-        "[LOGFLARE] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
+        "[Logflare Agent] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
       )
     end
   end
