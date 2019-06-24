@@ -54,6 +54,7 @@ defmodule LogflareAgent.Main do
 
         sed
         |> String.split("\n", trim: true)
+        |> Enum.drop(1)
         |> Enum.each(fn line -> log_line(line, state) end)
 
         state = Map.put(state, :line_count, line_count)
