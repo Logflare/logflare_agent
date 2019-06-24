@@ -16,13 +16,15 @@ config :lfagent,
   sources: [
     %{
       path: "/private/var/log/system.log",
-      source: "a6c5bca7-a8a7-4bda-a984-a873daaad8d0"
+      source: "f0b27c3e-cb84-4603-9460-37007fd97cec"
     },
     %{
       path: "/Users/chasegranberry/.cloudflared/cloudflared.log",
-      source: "dc2804de-ef20-459d-93fd-8b6f938d2bb0"
+      source: "f0b27c3e-cb84-4603-9460-37007fd97cec"
     }
-  ]
+  ],
+  url: "https://api.logflare.app",
+  api_key: "XXXXXX"
 
 #
 # and access this configuration in your application as:

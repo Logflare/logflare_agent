@@ -62,9 +62,9 @@ defmodule LFAgent.Main do
   end
 
   defp log_line(line, state) do
-    api_key = System.get_env("LOGFLARE_KEY")
+    api_key = Application.get_env(:lfagent, :api_key)
     source = state.source
-    url = "https://logflare.app/api/logs"
+    url = Application.get_env(:lfagent, :url) <> "/logs"
     user_agent = List.to_string(Application.spec(:lfagent, :vsn))
 
     headers = [

@@ -6,24 +6,18 @@ This Elixir app watches a file and sends new lines to Logflare via the API.
 
 ## Usage
 
-To install:
+To install stand alone:
 
   * Install Erlang
   * Install Elixir
   * `git clone https://github.com/Logflare/logflare-agent.git`
   * `mix deps.get`
 
-Change the file to watch and the source key in `./config/config.exs`
-
-```elixir
-config :lfagent,
-  file_to_watch: "/private/var/log/system.log",
-  source: "YOUR_SOURCE_KEY"
-```
+Configure it.
 
 `mix release`
 
-`LOGFLARE_KEY=YOUR_API_KEY _build/dev/rel/lfagent/bin/lfagent start`
+`_build/dev/rel/lfagent/bin/lfagent start`
 
 Optionally to start the agent at bootup:
 
@@ -31,11 +25,43 @@ Optionally to start the agent at bootup:
 
 Add this line to your crontab and save:
 
-`@reboot LOGFLARE_KEY=YOUR_API_KEY /FULL_PATH_TO_INSTALL/_build/dev/rel/lfagent/bin/lfagent start`
+`@reboot /FULL_PATH_TO_INSTALL/_build/dev/rel/lfagent/bin/lfagent start`
 
-## Installation
+## Configure
 
-**TODO: figure out how this would work within another app**
+Change the file to watch and the source key in `./config/config.exs`
+
+```elixir
+config :lfagent,
+  sources: [
+    %{
+      path: "/home/logflare/app_release/logflare/var/log/erlang.log.1",
+      source: "SOURCE_ID"
+    },
+    %{
+      path: "/home/logflare/app_release/logflare/var/log/erlang.log.2",
+      source: "SOURCE_ID"
+    },
+    %{
+      path: "/home/logflare/app_release/logflare/var/log/erlang.log.3",
+      source: "SOURCE_ID"
+    },
+    %{
+      path: "/home/logflare/app_release/logflare/var/log/erlang.log.4",
+      source: "SOURCE_ID"
+    },
+    %{
+      path: "/home/logflare/app_release/logflare/var/log/erlang.log.5",
+      source: "SOURCE_ID"
+    }
+  ],
+  url: "https://api.logflare.app",
+  api_key: "YOUR_API_KEY"
+```
+
+Your `source`s can be different with each file. This example is useful when watching Erlang log files.
+
+## Installation with Hex
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
 by adding `lfagent` to your list of dependencies in `mix.exs`:
@@ -43,7 +69,7 @@ by adding `lfagent` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:lfagent, "~> 0.1.0"}
+    {:lfagent, "~> 0.5.0"}
   ]
 end
 ```
