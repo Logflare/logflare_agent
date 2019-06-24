@@ -98,7 +98,7 @@ defmodule LogflareAgent.Main do
     {wc, exit_status} = System.cmd("wc", ["-l", "#{filename}"], stderr_to_stdout: true)
 
     if exit_status == 1 do
-      0
+      1
     else
       [line_count, _] = String.split(wc)
       String.to_integer(line_count)
