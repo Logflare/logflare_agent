@@ -41,7 +41,6 @@ defmodule LogflareAgent.Main do
 
   If new lines are found we update the `state.line_count` to reflect
   the current state of the log file.
-
   """
 
   def handle_info(:work, state) do
@@ -65,6 +64,21 @@ defmodule LogflareAgent.Main do
         state = Map.put(state, :line_count, line_count)
         schedule_work()
         {:noreply, state}
+    end
+  end
+
+  @doc """
+  Counts lines in a file with `wc`. Returns a `1` even when there is no file.
+  """
+
+  def count_lines(filename) do
+    {wc, exit_status} = System.cmd("wc", ["-l", "#{filename}"], stderr_to_stdout: true)
+
+    if exit_status == 1 do
+      1
+    else
+      [line_count, _] = String.split(wc)
+      String.to_integer(line_count)
     end
   end
 
@@ -92,17 +106,6 @@ defmodule LogflareAgent.Main do
       Logger.error(
         "[Logflare Agent] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
       )
-    end
-  end
-
-  defp count_lines(filename) do
-    {wc, exit_status} = System.cmd("wc", ["-l", "#{filename}"], stderr_to_stdout: true)
-
-    if exit_status == 1 do
-      1
-    else
-      [line_count, _] = String.split(wc)
-      String.to_integer(line_count)
     end
   end
 
