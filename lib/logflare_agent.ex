@@ -16,16 +16,14 @@ defmodule LogflareAgent.Main do
     line_count = count_lines(state.filename)
     state = Map.put(state, :line_count, line_count)
 
-    {:ok, version} = :application.get_key(:logflare_agent, :vsn)
-
     Logger.info(
-      "[Logflare Agent v#{version}] Watching #{state.filename} from line #{state.line_count} for source #{
+      "#{line_prefix()} Watching #{state.filename} from line #{state.line_count} for source #{
         state.source
       }..."
     )
 
     log_line(
-      "[Logflare Agent v#{version}] Watching #{state.filename} from line #{state.line_count} for source #{
+      "#{line_prefix()} Watching #{state.filename} from line #{state.line_count} for source #{
         state.source
       }...",
       state
@@ -110,9 +108,15 @@ defmodule LogflareAgent.Main do
 
     unless request.status_code == 200 do
       Logger.error(
-        "[Logflare Agent] Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
+        "#{line_prefix()} Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
       )
     end
+  end
+
+  defp line_prefix() do
+    {:ok, version} = :application.get_key(:logflare_agent, :vsn)
+
+    "[Logflare Agent v#{version}]"
   end
 
   defp schedule_work() do
