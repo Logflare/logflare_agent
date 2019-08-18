@@ -16,14 +16,16 @@ defmodule LogflareAgent.Main do
     line_count = count_lines(state.filename)
     state = Map.put(state, :line_count, line_count)
 
+    {:ok, version} = :application.get_key(:logflare_agent, :vsn)
+
     Logger.info(
-      "[Logflare Agent] Watching #{state.filename} from line #{state.line_count} for source #{
+      "[Logflare Agent v#{version}] Watching #{state.filename} from line #{state.line_count} for source #{
         state.source
       }..."
     )
 
     log_line(
-      "[Logflare Agent] Watching #{state.filename} from line #{state.line_count} for source #{
+      "[Logflare Agent v#{version}] Watching #{state.filename} from line #{state.line_count} for source #{
         state.source
       }...",
       state
