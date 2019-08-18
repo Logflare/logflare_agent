@@ -69,7 +69,7 @@ by adding `logflare_agent` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:logflare_agent, "~> 0.6.0"}
+    {:logflare_agent, "~> 0.6.1"}
   ]
 end
 ```
