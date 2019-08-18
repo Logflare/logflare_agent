@@ -96,10 +96,13 @@ defmodule LogflareAgent.Main do
     ]
 
     body =
-      Jason.encode!(%{
-        log_entry: line,
-        source: source
-      })
+      case Jason.encode(%{log_entry: line, source: source}) do
+        {:ok, body} ->
+          body
+
+        {:error, _error} ->
+          Jason.encode(%{log_entry: "JSON encode error!"}, source: source)
+      end
 
     request = HTTPoison.post!(url, body, headers)
 
