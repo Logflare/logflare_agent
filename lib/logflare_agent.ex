@@ -95,21 +95,20 @@ defmodule LogflareAgent.Main do
       {"User-Agent", "Logflare Agent/#{user_agent}"}
     ]
 
-    body =
-      case Jason.encode(%{log_entry: line, source: source}) do
-        {:ok, body} ->
-          body
+    case Jason.encode(%{log_entry: line, source: source}) do
+      {:ok, body} ->
+        request = HTTPoison.post!(url, body, headers)
 
-        {:error, _error} ->
-          Jason.encode(%{log_entry: "JSON encode error!"}, source: source)
-      end
+        unless request.status_code == 200 do
+          Logger.error(
+            "#{line_prefix()} Something went wrong. Logflare reponded with a #{
+              request.status_code
+            } HTTP status code."
+          )
+        end
 
-    request = HTTPoison.post!(url, body, headers)
-
-    unless request.status_code == 200 do
-      Logger.error(
-        "#{line_prefix()} Something went wrong. Logflare reponded with a #{request.status_code} HTTP status code."
-      )
+      {:error, _error} ->
+        Logger.error("#{line_prefix()} JSON encode error.")
     end
   end
 
