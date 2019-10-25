@@ -97,14 +97,18 @@ defmodule LogflareAgent.Main do
 
     case Jason.encode(%{log_entry: line, source: source}) do
       {:ok, body} ->
-        request = HTTPoison.post!(url, body, headers)
+        case HTTPoison.post(url, body, headers) do
+          {:ok, response} ->
+            unless response.status_code == 200 do
+              Logger.error(
+                "#{line_prefix()} Something went wrong. Logflare reponded with a #{
+                  request.status_code
+                } HTTP status code."
+              )
+            end
 
-        unless request.status_code == 200 do
-          Logger.error(
-            "#{line_prefix()} Something went wrong. Logflare reponded with a #{
-              request.status_code
-            } HTTP status code."
-          )
+          {:error, _response} ->
+            Logger.error("#{line_prefix()} Something went wrong.")
         end
 
       {:error, _error} ->
