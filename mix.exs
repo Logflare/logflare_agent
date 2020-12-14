@@ -36,7 +36,7 @@ defmodule LogflareAgent.MixProject do
       {:jason, "~> 1.1"},
       {:distillery, "~> 2.0"},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
-      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.5.3", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 0.5", only: [:dev], runtime: false}
     ]
   end
