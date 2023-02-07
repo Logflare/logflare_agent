@@ -8,7 +8,7 @@ defmodule LogflareAgent.Application do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    log_files = Application.get_env(:logflare_agent, :sources)
+    log_files = Application.get_env(:logflare_agent, :sources, [])
 
     children =
       Enum.map(
